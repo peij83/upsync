@@ -28,11 +28,22 @@ class synchronizer(object):
 
         remote_path = os.path.join(self._remote_sync_path, subdir)
 
-        local_dir_list = query(local_items).where(lambda local_item: os.path.isdir(os.path.join(local_path, local_item))).to_list()
-        local_file_list = query(local_items).where(lambda local_item: not os.path.isdir(os.path.join(local_path, local_item))).to_list()
+        local_dir_list = query(local_items)\
+            .where(lambda local_item: os.path.isdir(os.path.join(local_path, local_item)))\
+            .order_by(lambda i: i)\
+            .to_list()
+        
+        local_file_list = query(local_items)\
+            .where(lambda local_item: not os.path.isdir(os.path.join(local_path, local_item)))\
+            .order_by(lambda i: i)\
+            .to_list()
 
-        remote_dir_list = self._remote_manager.get_directories(remote_path).to_list()
-        remote_file_list = self._remote_manager.get_files(remote_path).to_list()
+        remote_dir_list = self._remote_manager.get_directories(remote_path)\
+            .order_by(lambda i: i.name)\
+            .to_list()
+        remote_file_list = self._remote_manager.get_files(remote_path)\
+            .order_by(lambda i: i.name)\
+            .to_list()
 
         for remote_file in remote_file_list:
             if not query(local_file_list).any(lambda local_file: local_file == remote_file.name):
