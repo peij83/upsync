@@ -3,6 +3,7 @@ from remote_synchronizer.synchronizer import synchronizer
 from remote_synchronizer.onedrive.onedrive_remote_manager import onedrive_remote_manager
 import onedrivesdk
 import json
+import re
 
 params = json.load(open('upsync_conf.json'))
 
