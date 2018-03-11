@@ -30,7 +30,6 @@ class onedrive_remote_manager(remote_manager_base):
         pass
 
     def upload_item(self, remote_path, local_path, filename):
-        print("uploading item : ", local_path, " to : ", remote_path, " with name :", filename )
         local_file_size = os.stat(local_path).st_size
         
         if local_file_size > self._sync_upload_max_size:
@@ -39,7 +38,6 @@ class onedrive_remote_manager(remote_manager_base):
             self._client.item(drive='me', path=remote_path).children[filename].upload(local_path)
         
     def delete_item(self, item):
-        print("deleting item : ", item.name, " with id : ", item.id)
         self._client.item(drive='me', id=item.id).delete()
 
     def create_directory(self, name, parent_path):
@@ -47,5 +45,4 @@ class onedrive_remote_manager(remote_manager_base):
         i = onedrivesdk.Item()
         i.name = name
         i.folder = f
-        print("Creating folder : ", name, " in ", parent_path)
         self._client.item(drive='me', path=parent_path).children.add(i)
